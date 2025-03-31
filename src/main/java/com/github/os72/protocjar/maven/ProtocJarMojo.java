@@ -214,6 +214,11 @@ public class ProtocJarMojo extends AbstractMojo
 	private String outputDirectorySuffix;
 
 	/**
+	 * Skip build. Can be used in conjunction with build-helper-maven-plugin's uptodate-property
+	 */
+	private boolean skip;
+
+	/**
 	 * Output options. Used for example with type "js" to create protoc argument --js_out=[OPTIONS]:output_dir
 	 * <p>
 	 * Ignored when {@code <outputTargets>} is given
@@ -319,6 +324,11 @@ public class ProtocJarMojo extends AbstractMojo
 	public void execute() throws MojoExecutionException {
 		if (project.getPackaging() != null && "pom".equals(project.getPackaging().toLowerCase())) {
 			getLog().info("Skipping 'pom' packaged project");
+			return;
+		}
+
+		if(skip) {
+			getLog().info("Skipping because of skip=true");
 			return;
 		}
 		
